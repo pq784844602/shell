@@ -1,15 +1,17 @@
 #!/bin/bash
 # Program
 #    use cp to backup mysql data everyday!
-# Path
+# Path 
+# recover mysqlbinlog --no-defaults mysql-bin.000001 |mysql -u -p
+# 
 BakDir=/data/mysql/backup/daily
-BinDir=/data/mysql/data
+BinDir=/data/mysql/
 LogFile=/data/mysql/backup/bak.log
-BinFile=/data/mysql/data/mysql-bin.index
-MYSQLDUMP="/usr/local/mysql/bin/mysqldump"
+BinFile=/data/mysql/mysql-bin.index
+MYSQLADMIN="/usr/local/mysql/bin/mysqladmin"
 DBUSER="root"
 DBPASSWD="Baipeng2016"
-$MYSQLDUMP -h 127.0.0.1 -u $DBUSER -p$DBPASSWD flush-logs
+$MYSQLADMIN -h 127.0.0.1 -u $DBUSER -p$DBPASSWD flush-logs
 #这个是用于产生新的mysql-bin.00000*文件
 Counter=`wc -l $BinFile |awk '{print $1}'`
 NextNum=0
@@ -35,3 +37,4 @@ do
         fi
 done
 echo `date +"%Y年%m月%d日 %H:%M:%S"` $Next Bakup succ! >> $LogFile
+find $BakDir -name "*.sql.tgz" -type f -mtime +7 -exec rm {} \; > /dev/null 2>&1

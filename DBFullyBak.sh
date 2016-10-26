@@ -24,5 +24,6 @@ tar czf $GZDumpFile $DumpFile
 rm $DumpFile
 Last=`date +"%Y年%m月%d日 %H:%M:%S"`
 echo 开始:$Begin 结束:$Last $GZDumpFile succ >> $LogFile
+find $BakDir -name "*.sql.tgz" -type f -mtime +30 -exec rm {} \; > /dev/null 2>&1
 #cd $BakDir/daily
 #rm -f *
